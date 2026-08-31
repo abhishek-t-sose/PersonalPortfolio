@@ -58,9 +58,15 @@
     if (!el) return;
     try {
       const res = await fetch(url);
+      if (!res.ok) {
+        console.error(`Partial fetch failed (${res.status}): ${url}`);
+        el.innerHTML = ''; // fail quietly rather than injecting an error page's HTML
+        return;
+      }
       el.outerHTML = await res.text();
     } catch (e) {
       console.error('Failed to load partial', url, e);
+      el.innerHTML = '';
     }
   }
 
