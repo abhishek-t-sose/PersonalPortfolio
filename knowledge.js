@@ -16,6 +16,15 @@ const KNOWLEDGE_BASE = [
     metadata: { priority: 10 }
   },
   {
+    id: "overview-work",
+    category: "bio",
+    keywords: ["work", "works", "working", "field", "fields", "area", "areas", "specialize", "specializes",
+      "specialty", "focus", "focuses", "study", "studies", "expertise", "topics", "domain", "does", "research",
+      "science", "scientist", "overview", "summary", "explain", "describe"],
+    content: "Abhishek's work sits at the intersection of computational materials science and AI-driven automation, and breaks down into four connected pillars. (1) Bayesian Uncertainty Quantification (BUQ) for force fields: developing all-atom and coarse-grained interatomic potentials (e.g. CG-EAM models for Pd, Au, Ag, Cu, Pt) that come with calibrated uncertainty on both parameters and predicted properties, using Particle Swarm Optimization plus Bayesian posterior sampling (ESS, AIES, Metropolis-Hastings). (2) Metal-organic frameworks (MOFs): simulation-driven design for hydrogen storage, drug delivery, and gas separation, using GCMC, NEMD, and PSO-genetic-algorithm searches over huge functional-group design spaces. (3) Machine learning for materials discovery: GPR, random forests, 3D-CNNs, stacked ensembles, and LLMs applied to green-solvent selection, high-entropy alloy design, tribology, and polymer property prediction. (4) Autonomous, AI-guided experimentation: his current postdoctoral focus at UMD is self-driving laboratory workflows — combining predictive/generative modeling with robot-assisted synthesis — to design composite aerogels and all-natural plastic substitutes with multiple tuned properties at once. Across all of this, the throughline is propagating uncertainty honestly from quantum mechanics through molecular dynamics to the experimental bench, rather than treating simulation outputs as exact.",
+    metadata: { priority: 10 }
+  },
+  {
     id: "contact-1",
     category: "contact",
     keywords: ["contact", "email", "reach", "collaborate", "collaboration", "hire", "hiring"],
@@ -305,11 +314,36 @@ const KNOWLEDGE_BASE = [
   // PUB: CG EAM (JCTC 2025)
   // ===============================
   {
-    id: "pub-cgeam",
+    id: "pub-cgeam-overview",
     category: "publications",
-    keywords: ["coarse", "grained", "eam", "metal", "buq", "jctc", "2025", "palladium", "gold", "silver", "copper", "platinum", "fcc"],
-    content: "Publication (2025): 'Development & Bayesian Uncertainty Quantification of Coarse-Grained Models of Metals Based on EAM Potentials' — AT Sose et al. — JCTC. DOI: 10.1021/acs.jctc.5c01322. Developed CG EAM potentials for FCC metals (Pd, Au, Ag, Cu, Pt) combining EAM's physical interpretability with coarse-graining efficiency. PSO explored 14D parameter space; BUQ provided uncertainty estimates. CG EAM reproduces key properties (lattice constant, cohesive energy, elastic constants) with quantified uncertainties.",
-    metadata: { priority: 7, year: 2025, journal: "JCTC", doi: "10.1021/acs.jctc.5c01322" }
+    keywords: ["cg", "eam", "coarse", "grained", "embedded", "atom", "metal", "metals", "pd", "au", "ag", "cu", "pt",
+      "palladium", "gold", "silver", "copper", "platinum", "fcc", "mapping", "8:1", "bead"],
+    content: "Publication (2025): 'Development and Bayesian Uncertainty Quantification of Coarse-Grained Models of Metals Based on Embedded Atom Method Potentials' — AT Sose, T Gustke, K Bejagam, F Wang, A Savara, SA Deshmukh — J. Chem. Theory Comput. 2025, 21, 12481-12496. DOI: 10.1021/acs.jctc.5c01322. Developed the first uncertainty-aware coarse-grained (CG) Embedded Atom Method (EAM) potentials for five face-centered cubic (FCC) metals: palladium (Pd), gold (Au), silver (Ag), copper (Cu), and platinum (Pt). Each metal uses an 8:1 CG mapping scheme where eight metal atoms are represented by one CG bead (a 2x2x2 all-atom unit cell maps to one CG unit cell), preserving FCC lattice symmetry while giving roughly an 8-fold reduction in particle count for faster simulations. Code and the final EAM potential files are on GitHub at Deshmukh-Group/CG-EAM-Metals-BUQ.",
+    metadata: { priority: 8, year: 2025, journal: "J. Chem. Theory Comput.", doi: "10.1021/acs.jctc.5c01322" }
+  },
+  {
+    id: "pub-cgeam-methods",
+    category: "publications",
+    keywords: ["cg", "eam", "parameters", "pso", "particle", "swarm", "optimization", "gpr", "gaussian", "process",
+      "regression", "sobol", "ess", "ensemble", "slice", "sampling", "lammps", "workflow", "14", "fourteen"],
+    content: "Methods: each metal's CG EAM potential has 14 tunable parameters (rho_e, alpha, beta, A, B, lambda, kappa, Fn3, F2, Fe, eta, rho_m, the lattice constant Lc, and fe) governing the embedding-energy and pairwise-interaction terms. The workflow has four stages. (1) Particle Swarm Optimization (128 particles, at least 100 epochs) coupled with CG MD in LAMMPS optimizes the 14 parameters against 10 target properties, reaching agreement within 5% of experimental/DFT values. (2) The optimized parameters are perturbed with Sobol sequences at five levels (0.25%, 0.5%, 1%, 2%, 4%; 1,000 samples each, 5,000 total) to generate a training set of parameter-property pairs from further CG MD runs. (3) A Gaussian Process Regression (GPR) surrogate is trained per property, selecting among six kernels (RBF, Exponential, Matern 3/2, Matern 5/2, RBF+RBF, Cosine) via 5-fold cross-validation. (4) Bayesian Uncertainty Quantification refines the parameters using Ensemble Slice Sampling (56 walkers, 2,000,000 posterior samples), with the prior a bounded uniform distribution over a 4% perturbation of the PSO-optimized values. The 10 evaluated properties are cohesive energy, density, elastic constants C11/C12/C44, bulk modulus, Poisson's ratio, and surface tensions on the (100), (110), and (111) planes.",
+    metadata: { priority: 8, year: 2025, journal: "J. Chem. Theory Comput." }
+  },
+  {
+    id: "pub-cgeam-results",
+    category: "publications",
+    keywords: ["cg", "eam", "r2", "accuracy", "gpr", "surface", "tension", "true", "tightened", "bulk", "modulus",
+      "coverage", "probability", "classification"],
+    content: "Key results: GPR surrogates achieved R-squared values of roughly 0.9-0.999 across most property/metal combinations. Weaker fits (R-squared below 0.80) occurred for surface tension at the (111) plane for Au, Pd, Cu, and Pt; surface tension at (100) for Cu and Pt; and Poisson's ratio for Pt — these were excluded from the Bayesian refinement step to avoid injecting extra instability, consistent with EAM potentials' known tendency to underestimate surface energies. Using a coverage-probability diagnostic and a True-Tightened / True-Unchanged / True-Loosened classification scheme (introduced in the authors' prior JCTC 2024 paper), the bulk modulus was classified True-Tightened for all five metals, as was C44; C11 and C12 were True-Tightened for all metals except Ag and Cu. Poisson's ratio was generally True-Loosened across most metals, meaning Bayesian refinement widened rather than narrowed its uncertainty relative to the experimental target.",
+    metadata: { priority: 8, year: 2025, journal: "J. Chem. Theory Comput." }
+  },
+  {
+    id: "pub-cgeam-sensitivity",
+    category: "publications",
+    keywords: ["cg", "eam", "sobol", "sensitivity", "lattice", "constant", "kappa", "rho_e", "fe", "correlation",
+      "bimodal", "silver", "posterior", "distribution"],
+    content: "Sensitivity findings (first-order Sobol indices): most properties across all five metals were most sensitive to the lattice constant (Lc), the scaled equilibrium bond distance between CG beads. For every metal except platinum, the second most sensitive parameter was rho_e (a coarse-grained proxy for local electron density). Cohesive energy specifically was most sensitive to Fe (the high-electron-density embedding coefficient) and B (the pairwise attraction coefficient) across all metals. Platinum was the outlier: most of its properties were dominated by kappa, the cutoff parameter for the short-range repulsive term, rather than by rho_e. Silver's posterior distributions were notably bimodal (two distinct high-probability parameter solutions, or 'modes') for several parameters and properties, indicating a rougher potential-energy surface with multiple competing local minima compared to the other four metals; corner plots in the paper mark these as Mode 1 and Mode 2 with separate robust parameter ranges reported for each.",
+    metadata: { priority: 7, year: 2025, journal: "J. Chem. Theory Comput." }
   },
 
   // ===============================
@@ -345,10 +379,25 @@ const KNOWLEDGE_BASE = [
   // PUB: MoS2-Water (J Phys Chem C 2022)
   // ===============================
   {
-    id: "pub-mos2",
+    id: "pub-mos2-overview",
     category: "publications",
-    keywords: ["mos2", "water", "interaction", "parameters", "interfacial", "pso", "wetting", "contact", "angle", "2022"],
-    content: "Publication (2022): 'Determination of accurate interaction parameters between MoS2 and water' — AT Sose, E Mohammadi, PF Achari, SA Deshmukh — J. Phys. Chem. C. Developed high-accuracy LJ cross-interaction parameters for MoS2-water using Particle Swarm Optimization (PSO) to reproduce experimental contact angles. These parameters enable accurate MD simulation of MoS2 wetting, interfacial structure, and dynamics — critical for electronics, catalysis, and sensing applications where humidity affects MoS2 performance.",
+    keywords: ["mos2", "molybdenum", "disulfide", "water", "interaction", "parameters", "interfacial", "2022"],
+    content: "Publication (2022): 'Determination of Accurate Interaction Parameters between the Molybdenum Disulfide and Water to Investigate Their Interfacial Properties' — AT Sose, E Mohammadi, PF Achari, SA Deshmukh — The Journal of Physical Chemistry C, 126(4), 2013-2022. MoS2 is attractive for energy storage, sensing, and lubricant applications, but its performance is sensitive to environmental humidity, so accurately modeling the MoS2-water interface matters for device design.",
+    metadata: { priority: 6, year: 2022, journal: "J. Phys. Chem. C" }
+  },
+  {
+    id: "pub-mos2-methods",
+    category: "publications",
+    keywords: ["mos2", "stillinger", "weber", "sw", "potential", "forcefield", "force", "field", "pso", "particle",
+      "swarm", "optimization", "nonbonded", "parameters", "water", "model", "tip3p", "spc"],
+    content: "Methods: MoS2 was represented using the Stillinger-Weber (SW) potential rather than a simple pairwise Lennard-Jones form. The paper develops precise nonbonded cross-interactions between this SW-parameterized MoS2 and three different water models. Force-field parameter development was accelerated by integrating Particle Swarm Optimization (PSO) directly with molecular dynamics (MD) simulations, tuning the cross-interaction parameters against two independent targets simultaneously: the experimentally measured macroscopic water contact angle on MoS2, and water-MoS2 binding energies obtained from quantum mechanical (DFT-level) calculations.",
+    metadata: { priority: 6, year: 2022, journal: "J. Phys. Chem. C" }
+  },
+  {
+    id: "pub-mos2-results",
+    category: "publications",
+    keywords: ["mos2", "contact", "angle", "wettability", "hydrophobic", "results", "binding", "energy", "accuracy"],
+    content: "Key results: the PSO-optimized cross-interaction parameters reproduced a macroscopic water contact angle of approximately 63-70 degrees on MoS2, in good agreement with experimentally reported values in the literature. Because the parameters were fit against both contact angle and quantum-mechanical binding energies simultaneously (rather than either alone), the resulting force field is intended to be more transferable across the different water models tested than parameters fit to a single target. These validated cross-interaction parameters enable more reliable MD simulations of MoS2 wetting, interfacial water structure, and dynamics under varying humidity — relevant to MoS2 use in electronics, catalysis, and sensing.",
     metadata: { priority: 6, year: 2022, journal: "J. Phys. Chem. C" }
   },
 
@@ -456,7 +505,7 @@ const KNOWLEDGE_BASE = [
     id: "impact-1",
     category: "impact",
     keywords: ["citation", "impact", "publication", "count", "paper", "how", "many", "first", "author"],
-    content: "17 peer-reviewed articles (including 2 under review/submitted in 2026). 8 first-author, 4 co-first-author. 311 total citations. Contributed to securing NSF CAREER award for Ph.D. advisor through preliminary data generation.",
+    content: "17 peer-reviewed articles (including 2 under review/submitted in 2026). 8 first-author, 4 co-first-author. 331 total citations. Contributed to securing NSF CAREER award for Ph.D. advisor through preliminary data generation.",
     metadata: { priority: 7 }
   },
   {

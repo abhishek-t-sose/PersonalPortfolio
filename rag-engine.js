@@ -20,16 +20,23 @@ const RAGEngine = (function () {
   // ===============================
   const STOP_WORDS = new Set([
     'a','an','the','is','are','was','were','be','been','being','have','has','had',
-    'do','does','did','will','would','shall','should','may','might','must','can','could',
+    'do','did','will','would','shall','should','may','might','must','can','could','does',
     'i','me','my','we','our','you','your','he','him','his','she','her','it','its',
     'they','them','their','this','that','these','those','am','or','and','but','if',
-    'then','so','no','not','of','at','by','for','with','about','to','from','in','on',
-    'up','out','off','over','into','as','than','too','very','just','also','what',
-    'which','who','whom','how','when','where','why','all','each','every','both',
-    'few','more','most','other','some','such','only','own','same','tell','know',
-    'abhishek','sose','dr','mr','please','could','would','like','want','need',
-    'get','got','make','much','many','well','really','paper','work','used','using'
+    'then','so','no','not','of','at','by','for','with','to','from','in','on',
+    'up','out','off','over','into','as','than','too','very','just','also',
+    'which','how','when','why','all','each','every','both',
+    'few','more','most','other','some','such','only','own','same',
+    'dr','mr','please','like','want','need',
+    'got','make','much','many','well','really'
   ]);
+  // Note: intentionally NOT stopping 'abhishek', 'sose', 'work', 'paper', 'what', 'who',
+  // 'about', 'tell', 'know', 'used', 'using' — these are exactly the words that show up
+  // in the most common questions this bot gets ("what does Abhishek work on?", "who is
+  // Abhishek Sose?", "what papers has he published?", "what force field did he use for
+  // X?"). An earlier version stopped all of them, which meant those queries tokenized to
+  // an empty array and silently fell back to "I don't have specific information" — this
+  // is why some pretty basic questions were failing.
 
   // Domain-specific synonym map: query term -> expansion terms
   const SYNONYMS = {
@@ -312,9 +319,21 @@ const RAGEngine = (function () {
     return score;
   }
 
-  function retrieve(query, topK = 8) {
-    const { original, expanded } = expandQuery(query);
-    if (original.length === 0) return [];
+  function retrieve(query, topK = 10) {
+    let { original, expanded } = expandQuery(query);
+
+    // Defensive fallback: if a query happens to tokenize to nothing (e.g. entirely
+    // punctuation, or every word happened to be a stopword), retry with a minimal
+    // stopword set rather than silently returning no results. Better to over-match
+    // than to falsely claim "I don't know" on a question that had real content.
+    if (original.length === 0) {
+      const MINIMAL_STOPS = new Set(['a','an','the','is','of','to','in','on','and','or']);
+      const raw = query.toLowerCase().replace(/[^\w\s-]/g, ' ').replace(/-/g, ' ')
+        .split(/\s+/).filter(w => w.length > 1 && !MINIMAL_STOPS.has(w));
+      original = raw.map(stem);
+      expanded = original;
+      if (original.length === 0) return [];
+    }
 
     const paperRoute = detectPaperRoute(query);
 
@@ -461,7 +480,7 @@ const RAGEngine = (function () {
 
         paperChunks.forEach((r, i) => {
           const label = chunkLabel(r.doc.id);
-          const snippets = extractSnippets(r.doc.id, original, 6);
+          const snippets = extractSnippets(r.doc.id, original, 8);
           if (label && paperChunks.length > 1) {
             response += (i > 0 ? '\n\n' : '') + label + '\n';
           } else if (i > 0) {
@@ -491,7 +510,7 @@ const RAGEngine = (function () {
     let response = '';
     const usedFamilies = new Set();
     let blockCount = 0;
-    const MAX_BLOCKS = 4;
+    const MAX_BLOCKS = 5;
 
     // Sort by score descending
     const sorted = [...results].sort((a, b) => b.score - a.score);
@@ -503,7 +522,7 @@ const RAGEngine = (function () {
       // For paper families, show only the most relevant chunk (avoid dumping entire papers)
       if (fam.startsWith('pub-') && usedFamilies.has(fam)) return;
 
-      const snippets = extractSnippets(r.doc.id, original, 4);
+      const snippets = extractSnippets(r.doc.id, original, 5);
       if (response.length > 0) response += '\n\n';
       response += snippets.join(' ');
       usedFamilies.add(fam);
@@ -517,9 +536,14 @@ const RAGEngine = (function () {
   // 6. SANITIZATION
   // ===============================
   function sanitize(text) {
-    text = text.replace(/\d{1,5}\s+([\w\s]+)(Ave|Avenue|St|Street|Blvd|Boulevard|Rd|Road|Dr|Drive|Ln|Lane|Way|Ct|Court|Pl|Place)\b[^.]*?(\d{5}(-\d{4})?)?/gi, '[redacted]');
+    // Require: digits, a capitalized street-name word, a WHOLE-WORD street
+    // abbreviation, and a trailing 5-digit ZIP somewhere in the same clause.
+    // The previous version had no word boundary before the abbreviation, so
+    // it matched "St" inside ordinary words like "first" (e.g. "8 first-author"
+    // silently became "[redacted]-author") and mangled unrelated numbers
+    // anywhere near a word containing st/rd/dr/ln/ct/pl/way as a substring.
+    text = text.replace(/\b\d{1,5}\s+[A-Z][\w\s]{0,40}?\b(Ave|Avenue|St|Street|Blvd|Boulevard|Rd|Road|Dr|Drive|Ln|Lane|Way|Ct|Court|Pl|Place)\.?\b[^.]{0,40}?\b\d{5}(-\d{4})?\b/g, '[redacted]');
     text = text.replace(/\bApt\.?\s*#?\d+[A-Za-z]?\b/gi, '');
-    text = text.replace(/\b\d{5}(-\d{4})?\b/g, '');
     text = text.replace(/\+?1?[-.\s]?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g, '');
     text = text.replace(/,\s*,/g, ',').replace(/\(\s*\)/g, '').replace(/\s{2,}/g, ' ');
     return text.trim();
@@ -542,7 +566,7 @@ const RAGEngine = (function () {
     }
 
     // Stage 1: Retrieve
-    const results = retrieve(query, 8);
+    const results = retrieve(query, 10);
 
     // Stage 2: Expand with sibling chunks for paper-specific queries
     const expanded = expandWithSiblings(results, query);
@@ -567,7 +591,7 @@ const RAGEngine = (function () {
         });
 
     } else if (intent === 'pub_count') {
-      response = "Abhishek has published **17 peer-reviewed articles** (including 2 under review/submitted in 2026), with **8 as first author** and **4 co-first author** publications. His current total citations are **311**.\n\n";
+      response = "Abhishek has published **17 peer-reviewed articles** (including 2 under review/submitted in 2026), with **8 as first author** and **4 co-first author** publications. His current total citations are **331**.\n\n";
       response += assembleResponse(expanded, query);
 
     } else {
