@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research — Abhishek T. Sose</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="research">
+
+<div id="site-nav"></div>
+
+<section style="padding-top:9rem;padding-bottom:2rem">
+  <div class="container">
+    <p class="section-label fade-up">Research</p>
+    <h1 class="section-title fade-up" style="font-size:2.4rem;margin-bottom:1rem">Projects and Themes</h1>
+    <p class="section-intro fade-up" style="margin-top:0">A closer look at the research programs behind the publication list — coarse-grained and uncertainty-aware force fields, metal-organic frameworks, and machine-learning-guided materials design.</p>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="container">
+
+    <div class="project-card fade-up">
+      <div class="project-tags"><span class="project-tag">Paper published</span><span class="project-tag">Uncertainty quantification</span></div>
+      <h3>Bayesian Uncertainty Quantification for Force Fields</h3>
+      <p class="project-desc">Developing coarse-grained and all-atom force fields that come with calibrated uncertainty estimates rather than a single "best" parameter set — combining Particle Swarm Optimization with Bayesian posterior sampling (ESS, AIES, Metropolis–Hastings).</p>
+      <div class="project-links">
+        <a href="https://doi.org/10.1021/acs.jctc.5c01322" target="_blank">CG-EAM Metals, JCTC 2025 →</a>
+      </div>
+      <ul class="project-bullets">
+        <li>Coarse-grained EAM potentials for five FCC metals (Pd, Au, Ag, Cu, Pt) with a Gaussian-Process surrogate and Sobol sensitivity analysis.</li>
+        <li>A "True-Tightened / Unchanged / Loosened" classification scheme for judging whether Bayesian refinement actually improved a model.</li>
+        <li>Methodology now packaged as a drag-and-drop browser tool — see the <a href="tools.html">Tools</a> page.</li>
+      </ul>
+    </div>
+
+    <div class="project-card fade-up">
+      <div class="project-tags"><span class="project-tag">Papers published</span><span class="project-tag">Metal-organic frameworks</span></div>
+      <h3>Metal-Organic Frameworks for Gas Storage &amp; Drug Delivery</h3>
+      <p class="project-desc">Simulation-driven design of MOFs — from hydrogen adsorption to on-demand drug release — combining classical MD, PSO/genetic-algorithm parameter search, and machine learning across a large functional-group design space.</p>
+      <div class="project-links">
+        <a href="publications.html">See full publication details →</a>
+      </div>
+      <ul class="project-bullets">
+        <li>A PSO-GA framework explored a design space of ~10³⁷ functionalized IRMOF-10 variants for hydrogen uptake.</li>
+        <li>3D-CNN models outperformed simpler ML baselines for predicting adsorption properties (R² = 0.91).</li>
+        <li>Photoactivated multivariate MOFs for on-demand drug release, published in JACS.</li>
+      </ul>
+    </div>
+
+    <div class="project-card fade-up">
+      <div class="project-tags"><span class="project-tag">Papers published</span><span class="project-tag">ML for materials</span></div>
+      <h3>Machine Learning for Sustainable Materials Design</h3>
+      <p class="project-desc">Applying ML — from GPR surrogates to explainable AI — to accelerate the search for greener solvents, fluorine-free membranes, and high-entropy alloys, and reviewing where ML has and hasn't delivered in tribology.</p>
+      <div class="project-links">
+        <a href="https://doi.org/10.1002/advs.202516851" target="_blank">Green Solvents, Advanced Science →</a>
+      </div>
+      <ul class="project-bullets">
+        <li>Assessment, selection, and substitution of solvents using ML property prediction.</li>
+        <li>AI-driven design of fluorine-free polymers for sustainable anion exchange membranes.</li>
+        <li>Explainable-AI-guided inverse design of FeNiCrCoCu multi-principal-element alloys, validated experimentally.</li>
+      </ul>
+    </div>
+
+    <div class="project-card fade-up">
+      <div class="project-tags"><span class="project-tag">Under review</span><span class="project-tag">Autonomous labs</span></div>
+      <h3>Robotics + ML for All-Natural Plastic Substitutes</h3>
+      <p class="project-desc">The current focus of my postdoctoral work: closing the loop between computational screening and robot-assisted synthesis to discover sustainable, biopolymer-based alternatives to conventional plastics.</p>
+      <ul class="project-bullets">
+        <li>A combined robotics + machine-learning workflow for composite aerogel discovery, currently under review at <em>Nature Protocols</em>.</li>
+        <li>Self-driving laboratory concepts applied to multi-property tuning of biopolymer composites.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="common.js"></script>
+</body>
+</html>
