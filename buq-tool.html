@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BUQ Insights — Abhishek T. Sose</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<style>
+:root {
+  --font-display: 'Source Serif 4', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+[data-theme="light"] {
+  --bg-primary: #FAF8F5; --bg-secondary: #FFFFFF; --bg-accent: #F0EDE8;
+  --text-primary: #1A1A1A; --text-secondary: #555; --text-tertiary: #888;
+  --accent: #B04A32; --accent-hover: #8C3926; --border: #E0DCD6;
+  --shadow: 0 2px 20px rgba(0,0,0,0.06); --shadow-hover: 0 8px 30px rgba(0,0,0,0.10);
+  --tag-bg: #EDE8E1; --tag-text: #6B5E4F;
+  --nav-bg: rgba(250,248,245,0.92);
+  --plot-grid: #E0DCD6;
+  --plot-paper: #FFFFFF;
+}
+[data-theme="dark"] {
+  --bg-primary: #121212; --bg-secondary: #1C1C1C; --bg-accent: #242424;
+  --text-primary: #E8E4DF; --text-secondary: #A8A8A8; --text-tertiary: #6E6E6E;
+  --accent: #E07A5F; --accent-hover: #F09C84; --border: #2E2E2E;
+  --shadow: 0 2px 20px rgba(0,0,0,0.3); --shadow-hover: 0 8px 30px rgba(0,0,0,0.4);
+  --tag-bg: #2A2520; --tag-text: #C4B49A;
+  --nav-bg: rgba(18,18,18,0.92);
+  --plot-grid: #2E2E2E;
+  --plot-paper: #1C1C1C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);transition:background var(--transition),color var(--transition);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-hover)}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem}
+.nav-brand{font-family:var(--font-display);font-weight:700;font-size:1.1rem;color:var(--text-primary)}
+.nav-links{display:flex;align-items:center;gap:1.5rem}
+.nav-links a{font-size:.85rem;color:var(--text-secondary);font-weight:500}
+.nav-links a:hover{color:var(--text-primary)}
+.theme-toggle{width:44px;height:24px;border-radius:12px;background:var(--tag-bg);border:1px solid var(--border);position:relative;cursor:pointer}
+.theme-toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--accent);transition:transform var(--transition)}
+[data-theme="dark"] .theme-toggle::after{transform:translateX(20px)}
+
+main{max-width:1100px;margin:0 auto;padding:7rem 2rem 6rem}
+
+.section-label{font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:.75rem}
+h1{font-family:var(--font-display);font-size:2.4rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:.75rem}
+.lede{color:var(--text-secondary);max-width:640px;font-size:1rem;margin-bottom:.5rem}
+.source-note{font-size:.82rem;color:var(--text-tertiary);margin-bottom:3rem}
+.source-note a{color:var(--text-tertiary);text-decoration:underline}
+
+.stage{border:1px solid var(--border);border-radius:14px;background:var(--bg-secondary);padding:2rem;margin-bottom:1.75rem;transition:border-color var(--transition)}
+.stage-head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.25rem}
+.stage-num{font-family:var(--font-mono);font-size:.8rem;color:var(--accent);border:1px solid var(--accent);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stage-title{font-family:var(--font-display);font-size:1.25rem;font-weight:600}
+.stage.disabled{opacity:.4;pointer-events:none}
+
+/* ---- Stage 1: dropzone ---- */
+.dropzone{border:1.5px dashed var(--border);border-radius:10px;padding:3rem 1.5rem;text-align:center;cursor:pointer;transition:border-color var(--transition),background var(--transition)}
+.dropzone:hover,.dropzone.drag{border-color:var(--accent);background:var(--bg-accent)}
+.dropzone p{color:var(--text-secondary);font-size:.92rem}
+.dropzone .dz-icon{font-family:var(--font-mono);font-size:.75rem;color:var(--text-tertiary);margin-top:.6rem}
+.file-input{display:none}
+.file-chip{display:inline-flex;align-items:center;gap:.6rem;background:var(--tag-bg);color:var(--tag-text);font-family:var(--font-mono);font-size:.8rem;padding:.4rem .8rem;border-radius:8px;margin-top:1rem}
+.sample-link{font-size:.85rem;color:var(--text-secondary);margin-top:1rem;display:block}
+
+/* ---- Stage 2: column roles ---- */
+.col-list{display:grid;gap:.6rem}
+.col-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:1rem;padding:.7rem 1rem;border:1px solid var(--border);border-radius:8px}
+.col-name{font-family:var(--font-mono);font-size:.85rem}
+.role-group{display:flex;gap:.4rem}
+.role-btn{font-family:var(--font-body);font-size:.78rem;padding:.35rem .8rem;border-radius:6px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;transition:all var(--transition)}
+.role-btn.active[data-role="input"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.role-btn.active[data-role="output"]{background:var(--text-primary);color:var(--bg-secondary);border-color:var(--text-primary)}
+.role-btn.active[data-role="ignore"]{background:var(--bg-accent);color:var(--text-tertiary)}
+
+.run-btn{margin-top:1.5rem;font-family:var(--font-body);font-weight:600;font-size:.92rem;padding:.8rem 1.8rem;border-radius:8px;background:var(--accent);color:#fff;border:none;cursor:pointer;transition:background var(--transition)}
+.run-btn:hover{background:var(--accent-hover)}
+.run-btn:disabled{background:var(--tag-bg);color:var(--text-tertiary);cursor:not-allowed}
+.run-note{font-size:.8rem;color:var(--text-tertiary);margin-top:.6rem}
+
+/* ---- Stage 3: results ---- */
+.tabs{display:flex;gap:.4rem;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.tab{font-family:var(--font-mono);font-size:.78rem;padding:.6rem 1rem;color:var(--text-tertiary);cursor:pointer;border-bottom:2px solid transparent}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.panel{display:none}
+.panel.active{display:block}
+.plot-box{border:1px solid var(--border);border-radius:10px;padding:.5rem;background:var(--bg-secondary);margin-bottom:1.5rem}
+.gpr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+.gpr-card{border:1px solid var(--border);border-radius:10px;padding:1.1rem}
+.gpr-card h4{font-family:var(--font-mono);font-size:.82rem;margin-bottom:.5rem;color:var(--text-primary)}
+.gpr-metric{font-size:.8rem;color:var(--text-secondary)}
+.gpr-metric b{color:var(--text-primary);font-family:var(--font-mono)}
+
+.footnote{font-size:.8rem;color:var(--text-tertiary);margin-top:2rem;line-height:1.6}
+
+@media(max-width:640px){
+  main{padding:6rem 1.2rem 4rem}
+  .col-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">A. T. Sose</a>
+    <div class="nav-links">
+      <a href="index.html#research">Research</a>
+      <div class="theme-toggle" id="themeToggle"></div>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <p class="section-label">Tools · Bayesian Uncertainty Quantification</p>
+  <h1>BUQ Insights</h1>
+  <p class="lede">Drop a CSV of model parameters and predicted properties. This tool builds the same three views used in
+    <a href="https://doi.org/10.1021/acs.jctc.5c01322" target="_blank">Sose et al., JCTC 2025</a> to inspect a
+    parameter–property dataset: a corner plot with correlation heatmap, a Gaussian Process surrogate per output,
+    and first-order Sobol sensitivity indices.</p>
+  <p class="source-note">Runs entirely in your browser — nothing you drop here is uploaded anywhere.
+    No sample data? <a href="#" id="loadSample">load a synthetic example</a> built to mirror the paper's
+    parameter/property structure.</p>
+
+  <!-- STAGE 1 -->
+  <div class="stage" id="stage1">
+    <div class="stage-head"><span class="stage-num">1</span><span class="stage-title">Upload your data</span></div>
+    <div class="dropzone" id="dropzone">
+      <p><strong>Drag and drop a CSV</strong> here, or click to choose a file</p>
+      <p class="dz-icon">.csv — one row per sample, one column per parameter or property</p>
+      <input type="file" id="fileInput" class="file-input" accept=".csv">
+    </div>
+    <div id="fileChipWrap"></div>
+  </div>
+
+  <!-- STAGE 2 -->
+  <div class="stage disabled" id="stage2">
+    <div class="stage-head"><span class="stage-num">2</span><span class="stage-title">Assign column roles</span></div>
+    <p class="lede" style="margin-bottom:1.2rem;font-size:.9rem">Mark each column as an <strong>input</strong> (a model
+      parameter), an <strong>output</strong> (a predicted property), or ignore it.</p>
+    <div class="col-list" id="colList"></div>
+    <button class="run-btn" id="runBtn" disabled>Run analysis</button>
+    <p class="run-note" id="runNote"></p>
+  </div>
+
+  <!-- STAGE 3 -->
+  <div class="stage disabled" id="stage3">
+    <div class="stage-head"><span class="stage-num">3</span><span class="stage-title">Results</span></div>
+    <div class="tabs">
+      <div class="tab active" data-panel="panelCorner">Corner plot &amp; heatmap</div>
+      <div class="tab" data-panel="panelGpr">GPR surrogate</div>
+      <div class="tab" data-panel="panelSobol">Sobol sensitivity</div>
+    </div>
+
+    <div class="panel active" id="panelCorner">
+      <div class="plot-box"><div id="splomPlot" style="width:100%;height:640px"></div></div>
+      <div class="plot-box"><div id="heatmapPlot" style="width:100%;height:420px"></div></div>
+    </div>
+
+    <div class="panel" id="panelGpr">
+      <p class="lede" style="font-size:.88rem;margin-bottom:1rem">One RBF-kernel Gaussian Process is fit per output
+        column against all selected inputs. R² is computed on the training data itself (a fit-quality check, not a
+        held-out validation score).</p>
+      <div class="gpr-grid" id="gprGrid"></div>
+    </div>
+
+    <div class="panel" id="panelSobol">
+      <p class="lede" style="font-size:.88rem;margin-bottom:1rem">First-order Sobol indices estimated by sampling
+        each trained GP surrogate (Saltelli's method), mirroring Figure 5 of the paper — the share of each output's
+        variance explained by each input parameter alone.</p>
+      <div class="plot-box"><div id="sobolPlot" style="width:100%;height:460px"></div></div>
+    </div>
+
+    <p class="footnote">This is an approximate, browser-only reimplementation for exploring your own data quickly —
+      not a substitute for the paper's full PSO + Bayesian ensemble-sampling pipeline. Treat the GP fits and Sobol
+      indices here as a first look, not a validated result.</p>
+  </div>
+</main>
+
+<script src="buq-engine.js"></script>
+<script>
+/* ===== theme toggle ===== */
+const html = document.documentElement;
+const toggle = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) html.setAttribute('data-theme', savedTheme);
+toggle.addEventListener('click', () => {
+  const n = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', n);
+  localStorage.setItem('theme', n);
+  if (window.__buqRendered) renderAllPlots(); // re-theme plots
+});
+
+/* ===== state ===== */
+let parsedRows = [];
+let columnNames = [];
+let roles = {}; // name -> 'input' | 'output' | 'ignore'
+let lastResults = null;
+
+const stage2 = document.getElementById('stage2');
+const stage3 = document.getElementById('stage3');
+const runBtn = document.getElementById('runBtn');
+const runNote = document.getElementById('runNote');
+
+/* ===== stage 1: file input ===== */
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+
+dropzone.addEventListener('click', () => fileInput.click());
+['dragover', 'dragleave', 'drop'].forEach(evt => {
+  dropzone.addEventListener(evt, e => {
+    e.preventDefault();
+    dropzone.classList.toggle('drag', evt === 'dragover');
+  });
+});
+dropzone.addEventListener('drop', e => {
+  const f = e.dataTransfer.files[0];
+  if (f) handleFile(f);
+});
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+});
+
+document.getElementById('loadSample').addEventListener('click', e => {
+  e.preventDefault();
+  fetch('sample_buq_data.csv').then(r => {
+    if (!r.ok) throw new Error('missing');
+    return r.text();
+  }).then(text => parseCSVText(text, 'sample_buq_data.csv'))
+    .catch(() => alert('sample_buq_data.csv not found next to this page — drop your own CSV instead.'));
+});
+
+function handleFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => parseCSVText(e.target.result, file.name);
+  reader.readAsText(file);
+}
+
+function parseCSVText(text, filename) {
+  const parsed = Papa.parse(text, { header: true, dynamicTyping: true, skipEmptyLines: true });
+  parsedRows = parsed.data.filter(r => Object.values(r).every(v => v !== null && v !== undefined && v !== ''));
+  columnNames = parsed.meta.fields.filter(f => f && f.trim().length);
+
+  document.getElementById('fileChipWrap').innerHTML =
+    `<div class="file-chip">📄 ${filename} — ${parsedRows.length} rows, ${columnNames.length} columns</div>`;
+
+  buildColumnPicker();
+  stage2.classList.remove('disabled');
+  stage3.classList.add('disabled');
+}
+
+/* ===== stage 2: role picker ===== */
+function buildColumnPicker() {
+  const list = document.getElementById('colList');
+  list.innerHTML = '';
+  roles = {};
+  columnNames.forEach((name, i) => {
+    // default guess: first ~60% of columns are inputs, rest outputs (user can override)
+    const guess = i < Math.ceil(columnNames.length * 0.55) ? 'input' : 'output';
+    roles[name] = guess;
+
+    const row = document.createElement('div');
+    row.className = 'col-row';
+    row.innerHTML = `
+      <span class="col-name">${name}</span>
+      <div class="role-group" data-col="${name}">
+        <button class="role-btn" data-role="input">Input</button>
+        <button class="role-btn" data-role="output">Output</button>
+        <button class="role-btn" data-role="ignore">Ignore</button>
+      </div>`;
+    list.appendChild(row);
+    row.querySelectorAll('.role-btn').forEach(btn => {
+      if (btn.dataset.role === guess) btn.classList.add('active');
+      btn.addEventListener('click', () => {
+        roles[name] = btn.dataset.role;
+        row.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        validateRoles();
+      });
+    });
+  });
+  validateRoles();
+}
+
+function validateRoles() {
+  const inputs = Object.values(roles).filter(r => r === 'input').length;
+  const outputs = Object.values(roles).filter(r => r === 'output').length;
+  const ok = inputs >= 1 && outputs >= 1;
+  runBtn.disabled = !ok;
+  runNote.textContent = ok
+    ? `${inputs} input(s), ${outputs} output(s) selected.`
+    : 'Select at least one input and one output column to continue.';
+}
+
+runBtn.addEventListener('click', runAnalysis);
+
+/* ===== stage 3: analysis ===== */
+function runAnalysis() {
+  const inputCols = columnNames.filter(c => roles[c] === 'input');
+  const outputCols = columnNames.filter(c => roles[c] === 'output');
+  const allCols = inputCols.concat(outputCols);
+
+  // cap training rows for browser performance (GP is O(n^3))
+  const MAX_ROWS = 260;
+  const rows = parsedRows.length > MAX_ROWS
+    ? sampleRows(parsedRows, MAX_ROWS)
+    : parsedRows;
+
+  const columns = allCols.map(name => ({ name, values: rows.map(r => Number(r[name])) }));
+  const corr = BUQ.correlationMatrix(columns);
+
+  const Xraw = rows.map(r => inputCols.map(c => Number(r[c])));
+  const { Z, means, stds } = BUQ.standardizeColumns(Xraw);
+  const ranges = inputCols.map((_, j) => {
+    const col = Xraw.map(r => r[j]);
+    return [Math.min(...col), Math.max(...col)];
+  });
+
+  const gprResults = {};
+  const sobolResults = {};
+
+  outputCols.forEach(outName => {
+    const y = rows.map(r => Number(r[outName]));
+    const gpr = new BUQ.GPR(Z, y, { noise: 1e-3 });
+
+    // fit quality (R^2 on training data)
+    const preds = Z.map(x => gpr.predictMean(x));
+    const yMean = BUQ.mean(y);
+    const ssRes = y.reduce((a, v, i) => a + (v - preds[i]) ** 2, 0);
+    const ssTot = y.reduce((a, v) => a + (v - yMean) ** 2, 0) || 1e-9;
+    const r2 = 1 - ssRes / ssTot;
+
+    gprResults[outName] = { gpr, r2, preds, actual: y };
+    sobolResults[outName] = BUQ.sobolFirstOrder(gpr, ranges, means, stds, 300);
+  });
+
+  lastResults = { columns, corr, inputCols, outputCols, gprResults, sobolResults };
+  window.__buqRendered = true;
+  stage3.classList.remove('disabled');
+  renderAllPlots();
+  stage3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function sampleRows(rows, n) {
+  const idx = new Set();
+  while (idx.size < n) idx.add(Math.floor(Math.random() * rows.length));
+  return [...idx].map(i => rows[i]);
+}
+
+/* ===== tabs ===== */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.panel).classList.add('active');
+    if (lastResults) Plotly.Plots.resize(document.querySelector(`#${tab.dataset.panel} > div > div`));
+  });
+});
+
+/* ===== plotting ===== */
+function plotlyTheme() {
+  const css = getComputedStyle(document.documentElement);
+  return {
+    paper_bgcolor: css.getPropertyValue('--plot-paper').trim(),
+    plot_bgcolor: css.getPropertyValue('--plot-paper').trim(),
+    font: { family: 'DM Sans, sans-serif', color: css.getPropertyValue('--text-primary').trim(), size: 11 },
+    gridColor: css.getPropertyValue('--plot-grid').trim(),
+    accent: css.getPropertyValue('--accent').trim()
+  };
+}
+
+function renderAllPlots() {
+  if (!lastResults) return;
+  renderSplom();
+  renderHeatmap();
+  renderGprCards();
+  renderSobol();
+}
+
+function renderSplom() {
+  const { columns } = lastResults;
+  const theme = plotlyTheme();
+  const dims = columns.map(c => ({ label: c.name, values: c.values }));
+  const trace = {
+    type: 'splom',
+    dimensions: dims,
+    marker: { color: theme.accent, size: 4, opacity: 0.55 },
+    diagonal: { visible: true }
+  };
+  const layout = {
+    ...basePlotLayout(theme),
+    margin: { l: 60, r: 20, t: 10, b: 60 }
+  };
+  Plotly.newPlot('splomPlot', [trace], layout, { responsive: true, displayModeBar: true });
+}
+
+function renderHeatmap() {
+  const { columns, corr } = lastResults;
+  const theme = plotlyTheme();
+  const names = columns.map(c => c.name);
+  const trace = {
+    type: 'heatmap',
+    z: corr, x: names, y: names,
+    zmin: -1, zmax: 1,
+    colorscale: [
+      [0, '#3B6FA0'], [0.5, theme.paper_bgcolor], [1, theme.accent]
+    ],
+    colorbar: { title: 'r', tickfont: { color: theme.font.color } }
+  };
+  const layout = {
+    ...basePlotLayout(theme),
+    margin: { l: 110, r: 20, t: 10, b: 90 },
+    xaxis: { tickangle: -45 }
+  };
+  Plotly.newPlot('heatmapPlot', [trace], layout, { responsive: true, displayModeBar: true });
+}
+
+function renderGprCards() {
+  const { gprResults } = lastResults;
+  const grid = document.getElementById('gprGrid');
+  grid.innerHTML = '';
+  Object.entries(gprResults).forEach(([name, res]) => {
+    const card = document.createElement('div');
+    card.className = 'gpr-card';
+    card.innerHTML = `
+      <h4>${name}</h4>
+      <p class="gpr-metric">Training R²: <b>${res.r2.toFixed(3)}</b></p>
+      <p class="gpr-metric">Length scale: <b>${res.gpr.lengthScale.toFixed(3)}</b></p>
+      <div id="gprPlot-${cssSafe(name)}" style="width:100%;height:180px;margin-top:.6rem"></div>`;
+    grid.appendChild(card);
+  });
+  const theme = plotlyTheme();
+  Object.entries(gprResults).forEach(([name, res]) => {
+    const trace = {
+      type: 'scatter', mode: 'markers',
+      x: res.actual, y: res.preds,
+      marker: { color: theme.accent, size: 5, opacity: 0.6 }
+    };
+    const lo = Math.min(...res.actual, ...res.preds), hi = Math.max(...res.actual, ...res.preds);
+    const diag = { type: 'scatter', mode: 'lines', x: [lo, hi], y: [lo, hi], line: { color: theme.font.color, dash: 'dot', width: 1 } };
+    Plotly.newPlot(`gprPlot-${cssSafe(name)}`, [trace, diag], {
+      ...basePlotLayout(theme),
+      margin: { l: 40, r: 10, t: 5, b: 30 },
+      xaxis: { title: 'actual' }, yaxis: { title: 'predicted' },
+      showlegend: false
+    }, { responsive: true, displayModeBar: false });
+  });
+}
+
+function renderSobol() {
+  const { inputCols, sobolResults } = lastResults;
+  const theme = plotlyTheme();
+  const palette = ['#B04A32', '#6B8FA3', '#C89B3C', '#7A8F5C', '#9B6B9E', '#4E7C8C', '#B37B4A', '#5E6B8A'];
+  const outputs = Object.keys(sobolResults);
+  const traces = inputCols.map((param, i) => ({
+    type: 'bar',
+    name: param,
+    x: outputs,
+    y: outputs.map(o => sobolResults[o][i]),
+    marker: { color: palette[i % palette.length] }
+  }));
+  Plotly.newPlot('sobolPlot', traces, {
+    ...basePlotLayout(theme),
+    barmode: 'stack',
+    margin: { l: 50, r: 20, t: 10, b: 60 },
+    yaxis: { title: 'first-order Sobol index (normalized)', range: [0, 1] },
+    legend: { orientation: 'h', y: -0.25 }
+  }, { responsive: true, displayModeBar: true });
+}
+
+function basePlotLayout(theme) {
+  return {
+    paper_bgcolor: theme.paper_bgcolor,
+    plot_bgcolor: theme.paper_bgcolor,
+    font: theme.font
+  };
+}
+
+function cssSafe(s) { return s.replace(/[^a-zA-Z0-9_-]/g, '_'); }
+</script>
+</body>
+</html>
