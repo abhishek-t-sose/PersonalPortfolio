@@ -71,7 +71,7 @@ const KNOWLEDGE_BASE = [
     id: "research-umd-2",
     category: "research",
     keywords: ["self-driving", "lab", "robot", "autonomous", "automation", "plastic", "substitutes", "natural", "inverse", "design"],
-    content: "Abhishek is co-developing a robotics and machine learning integrated workflow for discovering all-natural plastic substitutes (Nature Protocols, under review 2026). This work integrates AI-ML driven robotic experiments with computational screening to close the loop between virtual discovery and physical synthesis. He also designed a robust framework for inverse-design of composite aerogels for multi-property optimization.",
+    content: "Abhishek is co-developing a robotics and machine learning integrated workflow for discovering all-natural plastic substitutes (Nature Protocols, in press 2026). This work integrates AI-ML driven robotic experiments with computational screening to close the loop between virtual discovery and physical synthesis. He also designed a robust framework for inverse-design of composite aerogels for multi-property optimization.",
     metadata: { priority: 9 }
   },
 
@@ -437,8 +437,15 @@ const KNOWLEDGE_BASE = [
     id: "pub-np",
     category: "publications",
     keywords: ["robot", "plastic", "substitutes", "natural", "nature", "protocol", "li", "chen", "2026"],
-    content: "Publication (Under Review 2026): 'A robotics and machine learning integrated workflow for discovering all-natural plastic substitutes' — Y Li*, AT Sose* (co-first author), T Chen, PY Chen — Nature Protocols.",
+    content: "Publication (In press 2026): 'A robotics and machine learning integrated workflow for discovering all-natural plastic substitutes' — Y Li*, AT Sose* (co-first author), T Chen, PY Chen — Nature Protocols.",
     metadata: { priority: 6, year: 2026, journal: "Nature Protocols" }
+  },
+  {
+    id: "pub-jctc-carb",
+    category: "publications",
+    keywords: ["carbohydrate", "sugar", "coarse", "grained", "cg", "bayesian", "uncertainty", "buq", "transferable", "jctc", "farzeen", "2026"],
+    content: "Publication (2026): 'Development and Bayesian uncertainty quantification of transferable coarse-grained models for carbohydrates' — P Farzeen, SY Joshi, AT Sose, SA Deshmukh — Journal of Chemical Theory and Computation. DOI: 10.1021/acs.jctc.6c01202.",
+    metadata: { priority: 6, year: 2026, journal: "Journal of Chemical Theory and Computation" }
   },
 
   // ===============================
@@ -505,7 +512,7 @@ const KNOWLEDGE_BASE = [
     id: "impact-1",
     category: "impact",
     keywords: ["citation", "impact", "publication", "count", "paper", "how", "many", "first", "author"],
-    content: "17 peer-reviewed articles (including 2 under review/submitted in 2026). 8 first-author, 4 co-first-author. 331 total citations. Contributed to securing NSF CAREER award for Ph.D. advisor through preliminary data generation.",
+    content: "17 peer-reviewed articles (including 2 under review/submitted in 2026). 8 first-author, 4 co-first-author. 331 total citations. Generated preliminary data that supported his Ph.D. advisor's NSF CAREER proposal.",
     metadata: { priority: 7 }
   },
   {
@@ -530,7 +537,7 @@ const KNOWLEDGE_BASE = [
     id: "theme-buq",
     category: "research",
     keywords: ["bayesian", "uncertainty", "quantification", "buq", "force", "field", "parameter", "pso", "optimization", "peuqse"],
-    content: "BUQ is central to Abhishek's research: JCTC 2024 evaluated 5 sampling algorithms for all-atom gold EAM (ESS and AIES best); JCTC 2025 developed CG EAM for 5 FCC metals with BUQ. Both use PSO for initial parameters then Bayesian inference via PEUQSE. He teaches PEUQSE workshops and contributed to his advisor's NSF CAREER award on this topic.",
+    content: "BUQ is central to Abhishek's research: JCTC 2024 evaluated 5 sampling algorithms for all-atom gold EAM (ESS and AIES best); JCTC 2025 developed CG EAM for 5 FCC metals with BUQ. Both use PSO for initial parameters then Bayesian inference via PEUQSE. He teaches PEUQSE workshops and generated preliminary data that supported his Ph.D. advisor's NSF CAREER proposal on this topic.",
     metadata: { priority: 8 }
   },
   {
