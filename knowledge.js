@@ -12,7 +12,7 @@ const KNOWLEDGE_BASE = [
     id: "bio-1",
     category: "bio",
     keywords: ["who", "about", "abhishek", "sose", "name", "introduce", "background", "summary"],
-    content: "Abhishek Tejrao Sose is a Postdoctoral Researcher at the University of Maryland, College Park. He is a computational-experimental materials scientist specializing in AI-enabled, autonomous materials discovery, spanning molecular simulations to robot-assisted synthesis. He has expertise in MD, DFT/AIMD, machine learning, and machine-learned interatomic potentials (MLIPs), with a strong focus on Bayesian uncertainty quantification and closed-loop optimization. He currently develops AI-guided, self-driving laboratory workflows for predictive design and synthesis of composite aerogels.",
+    content: "Abhishek Tejrao Sose is a Postdoctoral Researcher at the University of Maryland, College Park. He is a chemical engineer specializing in materials research, working across simulation and experiment on AI-enabled, autonomous materials discovery, from molecular simulations to robot-assisted synthesis. He has expertise in MD, DFT/AIMD, machine learning, and machine-learned interatomic potentials (MLIPs), with a strong focus on Bayesian uncertainty quantification and closed-loop optimization. He currently develops AI-guided, self-driving laboratory workflows for predictive design and synthesis of composite aerogels.",
     metadata: { priority: 10 }
   },
   {
@@ -424,14 +424,14 @@ const KNOWLEDGE_BASE = [
   },
 
   // ===============================
-  // PUB: Nature Review Materials & Nature Protocols (2026)
+  // PUB: Nature Reviews Materials, Nature Protocols & Digital Discovery (2026)
   // ===============================
   {
     id: "pub-nrm",
     category: "publications",
     keywords: ["thermal", "shock", "catalyst", "nature", "review", "materials", "hu", "liangbing", "2026"],
-    content: "Publication (Submitted 2026): 'Thermal-shock catalysts: principles, materials design, and catalytic performance' — T Li, F Bu, AT Sose et al. — Nature Review Materials.",
-    metadata: { priority: 6, year: 2026, journal: "Nature Review Materials" }
+    content: "Publication (Accepted 2026): 'Thermal-shock catalysts: principles, materials design, and catalytic performance' — T Li, F Bu, AT Sose, Z Cakir, K Zeng, AH Brozena, H Yang, C Wang, J Greeley, PY Chen, L Hu — Nature Reviews Materials.",
+    metadata: { priority: 6, year: 2026, journal: "Nature Reviews Materials" }
   },
   {
     id: "pub-np",
@@ -439,6 +439,13 @@ const KNOWLEDGE_BASE = [
     keywords: ["robot", "plastic", "substitutes", "natural", "nature", "protocol", "li", "chen", "2026"],
     content: "Publication (In press 2026): 'A robotics and machine learning integrated workflow for discovering all-natural plastic substitutes' — Y Li*, AT Sose* (co-first author), T Chen, PY Chen — Nature Protocols.",
     metadata: { priority: 6, year: 2026, journal: "Nature Protocols" }
+  },
+  {
+    id: "pub-dd-cantor",
+    category: "publications",
+    keywords: ["cantor", "alloy", "fenicocrmn", "high", "entropy", "explainable", "physics", "digital", "discovery", "wang", "2026"],
+    content: "Publication (2026): 'Data-driven design of Cantor-type FeNiCoCrMn alloys: integrating physics-based models, explainable AI, and experiment' — F Wang, A Iwanicki, AT Sose, L Pressley, T McQueen, SA Deshmukh — Digital Discovery 5, 4093-4109.",
+    metadata: { priority: 6, year: 2026, journal: "Digital Discovery" }
   },
   {
     id: "pub-jctc-carb",
@@ -512,14 +519,14 @@ const KNOWLEDGE_BASE = [
     id: "impact-1",
     category: "impact",
     keywords: ["citation", "impact", "publication", "count", "paper", "how", "many", "first", "author"],
-    content: "17 peer-reviewed articles (including 2 under review/submitted in 2026). 8 first-author, 4 co-first-author. 331 total citations. Generated preliminary data that supported his Ph.D. advisor's NSF CAREER proposal.",
+    content: "19 peer-reviewed papers (17 published, 2 accepted), 10 as first or co-first author. 434 total citations (Google Scholar). Generated preliminary data that supported his Ph.D. advisor's NSF CAREER proposal.",
     metadata: { priority: 7 }
   },
   {
     id: "future-1",
     category: "career",
     keywords: ["faculty", "professor", "job", "market", "hire", "position", "group", "lab", "future", "plan", "goal"],
-    content: "Abhishek is on the academic job market for faculty positions. Plans to establish a research group focusing on AI-driven materials discovery, autonomous self-driving laboratories, and multi-scale computational materials design — from DFT through MD/FEA to robotic experimental verification.",
+    content: "Abhishek is on the 2026-27 academic job market for faculty positions. At the AIChE Annual Meeting 2026 in Minneapolis he presents poster 3gc in the Meet the Faculty and Post-Doc Candidates session (Sun Nov 8) and talk 70a in the Faculty Candidates in CoMSEF/Area 1a session (Mon Nov 9). His CV is available on this site.",
     metadata: { priority: 8 }
   },
 

@@ -591,7 +591,7 @@ const RAGEngine = (function () {
         });
 
     } else if (intent === 'pub_count') {
-      response = "Abhishek has published **17 peer-reviewed articles** (including 2 under review/submitted in 2026), with **8 as first author** and **4 co-first author** publications. His current total citations are **331**.\n\n";
+      response = "Abhishek has **19 peer-reviewed papers** (17 published, 2 accepted), **10 as first or co-first author**, with **434 citations** (Google Scholar).\n\n";
       response += assembleResponse(expanded, query);
 
     } else {
