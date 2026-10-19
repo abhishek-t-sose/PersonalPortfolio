@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <style>
 :root {
   --font-display: 'Source Serif 4', Georgia, serif;
@@ -103,6 +104,26 @@ h1{font-family:var(--font-display);font-size:2.4rem;font-weight:700;letter-spaci
 
 .footnote{font-size:.8rem;color:var(--text-tertiary);margin-top:2rem;line-height:1.6}
 
+/* ---- how-it-works sampler (viz/buq-sampler.js) ---- */
+.sampler-lede{color:var(--text-secondary);font-size:.92rem;max-width:760px;margin-bottom:1.25rem}
+.sampler-wrap{position:relative;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg-primary)}
+.sampler-viz{height:440px;cursor:grab}
+.sampler-viz:active{cursor:grabbing}
+.sampler-hud{position:absolute;left:1rem;top:.9rem;right:1rem;pointer-events:none;font-size:.82rem;color:var(--text-secondary)}
+.sampler-hud b{color:var(--text-primary);font-weight:600}
+.hud-stats{display:flex;gap:1.4rem;margin-top:.35rem;font-family:var(--font-mono);font-size:.72rem;color:var(--text-tertiary)}
+.hud-stats span b{font-family:var(--font-mono);font-weight:500;color:var(--text-primary)}
+.sampler-legend{position:absolute;left:1rem;bottom:.8rem;display:flex;gap:1rem;flex-wrap:wrap;font-size:.74rem;color:var(--text-tertiary);pointer-events:none}
+.sampler-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:.35rem;vertical-align:middle}
+.lg-pso{background:#3B6FA0}
+[data-theme="dark"] .lg-pso{background:#7FA7D6}
+.sampler-controls{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin-top:1rem}
+.sampler-controls .spacer{flex:1}
+.sampler-btn{font-family:var(--font-body);font-size:.8rem;padding:.4rem .9rem;border-radius:6px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;transition:all var(--transition)}
+.sampler-btn:hover{border-color:var(--accent);color:var(--text-primary)}
+.sampler-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+@media(max-width:640px){.sampler-viz{height:340px}.hud-stats{gap:.8rem;flex-wrap:wrap}.sampler-legend{position:static;padding:.6rem 1rem;border-top:1px solid var(--border);gap:.3rem .9rem}}
+
 @media(max-width:640px){
   main{padding:6rem 1.2rem 4rem}
   .col-row{grid-template-columns:1fr}
@@ -133,6 +154,41 @@ h1{font-family:var(--font-display);font-size:2.4rem;font-weight:700;letter-spaci
   <p class="source-note">Runs entirely in your browser — nothing you drop here is uploaded anywhere.
     No sample data? <a href="#" id="loadSample">load a synthetic example</a> built to mirror the paper's
     parameter/property structure.</p>
+
+  <!-- HOW IT WORKS -->
+  <div class="stage" id="samplerStage">
+    <div class="stage-head"><span class="stage-num">i</span><span class="stage-title">How the method works</span></div>
+    <p class="sampler-lede">Fitting a force field is a two-step search. First, a <b>particle swarm</b> explores the loss
+      landscape and converges on the best-fit parameter set. Then a <b>Bayesian sampler</b> starts from that optimum and
+      maps the posterior: every parameter set still consistent with the reference data. The width of that cloud is the
+      model's uncertainty. Switch samplers to compare how each one explores the same curved posterior.</p>
+    <div class="sampler-wrap">
+      <div class="sampler-viz" id="samplerViz" role="img" aria-label="3D loss landscape: a particle swarm converges on the minimum, then Bayesian sampler walkers spread out to map the posterior distribution"></div>
+      <div class="sampler-hud" aria-live="polite">
+        <div id="hudPhase"><b>1 · Particle swarm optimisation</b></div>
+        <div class="hud-stats">
+          <span>step <b id="hudIter">0</b></span>
+          <span>posterior samples <b id="hudSamples">—</b></span>
+          <span>acceptance <b id="hudAcc">—</b></span>
+        </div>
+      </div>
+      <div class="sampler-legend" aria-hidden="true">
+        <span><i class="lg-pso"></i>PSO particles</span>
+        <span><i style="background:var(--accent)"></i>sampler walkers &amp; posterior samples</span>
+        <span>drag to rotate</span>
+      </div>
+    </div>
+    <div class="sampler-controls">
+      <button class="sampler-btn active" data-sampler="aies">AIES</button>
+      <button class="sampler-btn" data-sampler="ess">ESS</button>
+      <button class="sampler-btn" data-sampler="mh">Metropolis–Hastings</button>
+      <span class="spacer"></span>
+      <button class="sampler-btn" id="samplerPause">Pause</button>
+      <button class="sampler-btn" id="samplerReplay">↻ Replay</button>
+    </div>
+    <p class="footnote" style="margin-top:1rem">A toy two-parameter landscape for illustration. The samplers are real
+      implementations running live in your browser; the paper applies the same workflow to real EAM parameters.</p>
+  </div>
 
   <!-- STAGE 1 -->
   <div class="stage" id="stage1">
@@ -190,6 +246,7 @@ h1{font-family:var(--font-display);font-size:2.4rem;font-weight:700;letter-spaci
 </main>
 
 <script src="buq-engine.js"></script>
+<script type="module" src="viz/buq-sampler.js"></script>
 <script>
 /* ===== theme toggle ===== */
 const html = document.documentElement;

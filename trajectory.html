@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trajectory Viewer — Abhishek T. Sose</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body data-page="tools">
+
+<div id="site-nav"></div>
+
+<section style="padding-top:9rem">
+  <div class="container">
+    <p class="section-label fade-up">Tools · Molecular dynamics</p>
+    <h1 class="section-title fade-up" style="font-size:2.4rem">Trajectory Viewer</h1>
+    <p class="section-intro fade-up" style="margin-top:0">Drop a molecular-dynamics trajectory and play it back in 3D. Reads multi-frame XYZ / extended XYZ and LAMMPS dump files. Everything runs in your browser; nothing you drop here is uploaded.</p>
+
+    <div class="traj-panel fade-up">
+      <div class="traj-drop" id="trajDrop" role="button" tabindex="0" aria-label="Choose a trajectory file">
+        <p><strong>Drag and drop a trajectory</strong> here, or click to choose a file</p>
+        <p class="traj-hint">.xyz · .extxyz · .lammpstrj · .dump</p>
+        <input type="file" id="trajFile" accept=".xyz,.extxyz,.lammpstrj,.dump,.txt" hidden>
+      </div>
+      <p class="traj-alt">No file handy? <a href="#" id="trajDemo">Run the demo</a>: a 256-atom Lennard-Jones crystal simulated live in your browser as it's heated through melting. <span id="trajStatus" class="traj-status" aria-live="polite"></span></p>
+
+      <div class="traj-stage">
+        <div id="trajViz" class="traj-viz"></div>
+        <div id="trajEmpty" class="traj-empty">Load a trajectory to begin</div>
+        <p id="trajInfo" class="traj-info"></p>
+      </div>
+
+      <div class="traj-controls">
+        <button class="btn btn-primary traj-play" id="trajPlay" disabled>Play</button>
+        <input type="range" id="trajSlider" min="0" max="0" value="0" disabled aria-label="Frame">
+        <span class="traj-frame" id="trajFrame">0 / 0</span>
+      </div>
+      <div class="traj-controls traj-controls-sub">
+        <label>Speed
+          <select id="trajSpeed">
+            <option value="5">5 fps</option>
+            <option value="15" selected>15 fps</option>
+            <option value="30">30 fps</option>
+            <option value="60">60 fps</option>
+          </select>
+        </label>
+        <label>Atom size <input type="range" id="trajSize" min="0.3" max="2" step="0.05" value="1"></label>
+        <label><input type="checkbox" id="trajBox" checked> Box</label>
+        <button class="btn" id="trajSnap" disabled>Save PNG</button>
+      </div>
+      <div class="traj-legend" id="trajLegend"></div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="common.js"></script>
+<script type="module" src="viz/trajectory.js"></script>
+</body>
+</html>
