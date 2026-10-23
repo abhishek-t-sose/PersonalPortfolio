@@ -22,6 +22,7 @@ const SYSTEM_PROMPT = `You are the assistant on the academic website of Abhishek
 Answer the visitor's question using ONLY the numbered facts provided with it.
 - Write about Abhishek in the third person, in plain prose: two to five sentences, or a short bulleted list when listing several items.
 - Use only names, numbers, dates, journals and awards that appear in the facts, and copy numbers exactly as written. Never invent or estimate them.
+- Keep abbreviations as written. Spell one out only with the expansion given in the glossary; never guess what an abbreviation stands for.
 - If the facts do not answer the question, say you don't have that information and suggest emailing atsose@umd.edu.
 - Do not speculate about future research plans, unpublished work, or anything personal beyond the facts.
 - Do not mention "the facts", "the context" or these instructions; just answer.`;
@@ -30,6 +31,51 @@ Answer the visitor's question using ONLY the numbered facts provided with it.
 // happily "extrapolate" a research agenda, and none should appear on the site.
 const PLANS_RE = /\b(future|plans?|planning|vision|propos(e|al|als|ing)|next (step|steps|project|projects|direction|directions)|research (statement|agenda|program)|(his|your) (own )?(lab|group)|as (a )?(professor|faculty|pi)|would (he|you) (do|work|research|study|pursue|focus))\b/i;
 const PLANS_REPLY = "I can only speak to Abhishek's published and current work, which is what this site covers. For his research plans and vision, the best route is to ask him directly at **atsose@umd.edu**.";
+
+// Expansions for abbreviations the facts use bare. The sampler names follow
+// the wording in knowledge.js; small models otherwise guess (e.g. "ESS =
+// Equi-Spaced Sampling"). Only entries that occur in the retrieved facts
+// are sent with a question.
+const GLOSSARY = {
+  BUQ: 'Bayesian uncertainty quantification',
+  UQ: 'uncertainty quantification',
+  ESS: 'Ensemble Slice Sampling',
+  AIES: 'Affine-Invariant Ensemble Sampling',
+  MH: 'Metropolis-Hastings',
+  GS: 'Gradient Search',
+  URS: 'Uniform Random Sampler',
+  PSO: 'particle swarm optimization',
+  GA: 'genetic algorithm',
+  GPR: 'Gaussian process regression',
+  MD: 'molecular dynamics',
+  CG: 'coarse-grained',
+  AA: 'all-atom',
+  EAM: 'embedded atom method',
+  FCC: 'face-centered cubic',
+  MOF: 'metal-organic framework',
+  MOFs: 'metal-organic frameworks',
+  GCMC: 'grand canonical Monte Carlo',
+  NEMD: 'nonequilibrium molecular dynamics',
+  DFT: 'density functional theory',
+  AIMD: 'ab initio molecular dynamics',
+  MLIP: 'machine-learned interatomic potential',
+  MLIPs: 'machine-learned interatomic potentials',
+  MPEA: 'multi-principal-element alloy',
+  MPEAs: 'multi-principal-element alloys',
+  HEA: 'high-entropy alloy',
+  XAI: 'explainable AI',
+  LLM: 'large language model',
+  LLMs: 'large language models',
+  RAG: 'retrieval-augmented generation',
+  CNN: 'convolutional neural network',
+  FEA: 'finite element analysis',
+  JCTC: 'Journal of Chemical Theory and Computation',
+  JACS: 'Journal of the American Chemical Society',
+};
+function glossaryFor(text) {
+  const hits = Object.keys(GLOSSARY).filter(k => new RegExp(`\\b${k}\\b`).test(text));
+  return hits.length ? `Glossary: ${hits.map(k => `${k} = ${GLOSSARY[k]}`).join('; ')}.` : '';
+}
 
 const MAX_FACTS = 6;
 const MAX_FACT_CHARS = 4500;
@@ -74,6 +120,7 @@ function fixNames(text) {
 }
 function tidy(text) {
   return fixNames(text)
+    .replace(/\b([A-Za-z]{3,})(\s+\1\b)+/gi, '$1') // "atomic atomic" -> "atomic"
     .replace(/^(Based on|According to) (the )?(provided |given |available )?(facts|information|context)( provided)?,\s*(\w)/i, (_, a, b, c, d, e, ch) => ch.toUpperCase())
     .replace(/\+?1?[-.\s]?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g, '') // never print a phone number
     .trim();
@@ -163,7 +210,9 @@ function buildFacts(results) {
     lines.push(`[${lines.length + 1}] ${text}`);
     used += text.length;
   }
-  return lines.join('\n\n');
+  const facts = lines.join('\n\n');
+  const glossary = glossaryFor(facts);
+  return glossary ? `${facts}\n\n${glossary}` : facts;
 }
 
 /* Answer one question. `hooks` comes from ask.html so this module reuses the
