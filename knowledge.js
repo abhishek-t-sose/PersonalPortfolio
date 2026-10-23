@@ -519,14 +519,14 @@ const KNOWLEDGE_BASE = [
     id: "impact-1",
     category: "impact",
     keywords: ["citation", "impact", "publication", "count", "paper", "how", "many", "first", "author"],
-    content: "19 peer-reviewed papers (17 published, 2 accepted), 10 as first or co-first author. 434 total citations (Google Scholar). Generated preliminary data that supported his Ph.D. advisor's NSF CAREER proposal.",
+    content: "Abhishek has 19 peer-reviewed papers in total: 17 already published and 2 accepted for publication. He is first or co-first author on 10 of them. His papers have 434 citations in total (Google Scholar). Generated preliminary data that supported his Ph.D. advisor's NSF CAREER proposal.",
     metadata: { priority: 7 }
   },
   {
     id: "future-1",
     category: "career",
     keywords: ["faculty", "professor", "job", "market", "hire", "position", "group", "lab", "future", "plan", "goal"],
-    content: "Abhishek is on the 2026-27 academic job market for faculty positions. At the AIChE Annual Meeting 2026 in Minneapolis he presents poster 3gc in the Meet the Faculty and Post-Doc Candidates session (Sun Nov 8) and talk 70a in the Faculty Candidates in CoMSEF/Area 1a session (Mon Nov 9). His CV is available on this site.",
+    content: "Abhishek is on the 2026-27 academic job market for faculty positions. At the upcoming AIChE Annual Meeting 2026 in Minneapolis he will present poster 3gc in the Meet the Faculty and Post-Doc Candidates session (Sun Nov 8) and talk 70a in the Faculty Candidates in CoMSEF/Area 1a session (Mon Nov 9). His CV is available on this site.",
     metadata: { priority: 8 }
   },
 
