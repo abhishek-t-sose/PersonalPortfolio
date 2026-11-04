@@ -430,7 +430,7 @@ const KNOWLEDGE_BASE = [
     id: "pub-nrm",
     category: "publications",
     keywords: ["thermal", "shock", "catalyst", "nature", "review", "materials", "hu", "liangbing", "2026"],
-    content: "Publication (Accepted 2026): 'Thermal-shock catalysts: principles, materials design, and catalytic performance' — T Li, F Bu, AT Sose, Z Cakir, K Zeng, AH Brozena, H Yang, C Wang, J Greeley, PY Chen, L Hu — Nature Reviews Materials.",
+    content: "Publication (In press 2026): 'Thermal-shock catalysts: principles, materials design, and catalytic performance' — T Li, F Bu, AT Sose, Z Cakir, K Zeng, AH Brozena, H Yang, C Wang, J Greeley, PY Chen, L Hu — Nature Reviews Materials.",
     metadata: { priority: 6, year: 2026, journal: "Nature Reviews Materials" }
   },
   {
@@ -519,14 +519,14 @@ const KNOWLEDGE_BASE = [
     id: "impact-1",
     category: "impact",
     keywords: ["citation", "impact", "publication", "count", "paper", "how", "many", "first", "author"],
-    content: "Abhishek has 19 peer-reviewed papers in total: 17 already published and 2 accepted for publication. He is first or co-first author on 10 of them. His papers have 434 citations in total (Google Scholar). Generated preliminary data that supported his Ph.D. advisor's NSF CAREER proposal.",
+    content: "Abhishek has 19 peer-reviewed papers in total: 17 already published and 2 in press. He is first or co-first author on 10 of them. His papers have 434 citations in total (Google Scholar). Generated preliminary data that supported his Ph.D. advisor's NSF CAREER proposal.",
     metadata: { priority: 7 }
   },
   {
     id: "future-1",
     category: "career",
     keywords: ["faculty", "professor", "job", "market", "hire", "position", "group", "lab", "future", "plan", "goal"],
-    content: "Abhishek is on the 2026-27 academic job market for faculty positions. At the upcoming AIChE Annual Meeting 2026 in Minneapolis he will present poster 3gc in the Meet the Faculty and Post-Doc Candidates session (Sun Nov 8) and talk 70a in the Faculty Candidates in CoMSEF/Area 1a session (Mon Nov 9). His CV is available on this site.",
+    content: "Abhishek is on the 2026-27 academic job market for faculty positions. At the upcoming AIChE Annual Meeting 2026 in Minneapolis he will present poster 3gc in the Meet the Faculty and Post-Doc Candidates session (Sun Nov 8) and three talks on Mon Nov 9: 70a 'Toward Confidence-Gated Materials Discovery' (8:00 AM, Faculty Candidates in CoMSEF/Area 1a), 91g 'LLM-Orchestrated Multi-Agent Workflows for Autonomous Molecular Dynamics Screening of Additives in Biopolymer-Clay Nanocomposites' (10:10 AM, Room 103F) and 210j 'Accelerating Inverse Design of Multi-Functional Composite Aerogels through Integrated Robotic Fabrication, Predictive-Generative AI and in silico Modeling' (5:45 PM, Room M100F). His CV is available on this site.",
     metadata: { priority: 8 }
   },
 
