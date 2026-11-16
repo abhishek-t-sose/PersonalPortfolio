@@ -591,7 +591,7 @@ const RAGEngine = (function () {
         });
 
     } else if (intent === 'pub_count') {
-      response = "Abhishek has **19 peer-reviewed papers** (17 published, 2 in press), **10 as first or co-first author**, with **434 citations** (Google Scholar).\n\n";
+      response = "Abhishek has **19 peer-reviewed papers** (18 published, 1 in press), **10 as first or co-first author**, with **434 citations** (Google Scholar).\n\n";
       response += assembleResponse(expanded, query);
 
     } else {

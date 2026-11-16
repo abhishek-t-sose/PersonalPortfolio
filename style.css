@@ -237,4 +237,11 @@ footer{padding:2.5rem 2rem;border-top:1px solid var(--border);text-align:center;
 .hn-when{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.04em;color:var(--accent)}
 .hn-what{font-size:.82rem;color:var(--text-secondary);line-height:1.5}
 .hn-what em{color:var(--text-tertiary)}
+.hero-news-past{margin-top:.75rem;padding-top:.6rem;border-top:1px solid var(--border)}
+.hero-news-past summary{cursor:pointer;list-style:none;font-size:.8rem;color:var(--text-secondary)}
+.hero-news-past summary::-webkit-details-marker{display:none}
+.hero-news-past summary::before{content:"+";display:inline-block;width:1em;font-family:var(--font-mono);color:var(--accent)}
+.hero-news-past[open] summary::before{content:"\2212"}
+.hero-news-past ul{margin-top:.55rem}
+.hero-news-past .hn-when{color:var(--text-tertiary)}
 @media(max-width:768px){.hero-news{text-align:left;margin-left:auto;margin-right:auto}}

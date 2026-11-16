@@ -71,7 +71,7 @@ const KNOWLEDGE_BASE = [
     id: "research-umd-2",
     category: "research",
     keywords: ["self-driving", "lab", "robot", "autonomous", "automation", "plastic", "substitutes", "natural", "inverse", "design"],
-    content: "Abhishek is co-developing a robotics and machine learning integrated workflow for discovering all-natural plastic substitutes (Nature Protocols, in press 2026). This work integrates AI-ML driven robotic experiments with computational screening to close the loop between virtual discovery and physical synthesis. He also designed a robust framework for inverse-design of composite aerogels for multi-property optimization.",
+    content: "Abhishek co-developed a robotics- and machine learning-integrated workflow for discovering all-natural plastic substitutes, published in Nature Protocols (2026), doi:10.1038/s41596-026-01449-4. This work integrates AI-ML driven robotic experiments with computational screening to close the loop between virtual discovery and physical synthesis. He also designed a robust framework for inverse-design of composite aerogels for multi-property optimization.",
     metadata: { priority: 9 }
   },
 
@@ -437,7 +437,7 @@ const KNOWLEDGE_BASE = [
     id: "pub-np",
     category: "publications",
     keywords: ["robot", "plastic", "substitutes", "natural", "nature", "protocol", "li", "chen", "2026"],
-    content: "Publication (In press 2026): 'A robotics and machine learning integrated workflow for discovering all-natural plastic substitutes' — Y Li*, AT Sose* (co-first author), T Chen, PY Chen — Nature Protocols.",
+    content: "Publication (2026): 'A robotics- and machine learning-integrated workflow for discovering all-natural plastic substitutes' — Y Li*, AT Sose* (co-first author), T Chen, PY Chen — Nature Protocols, published online 16 November 2026, doi:10.1038/s41596-026-01449-4.",
     metadata: { priority: 6, year: 2026, journal: "Nature Protocols" }
   },
   {
@@ -504,8 +504,8 @@ const KNOWLEDGE_BASE = [
   {
     id: "conf-1",
     category: "conferences",
-    keywords: ["conference", "talk", "presentation", "oral", "poster", "aiche", "acs", "mrs"],
-    content: "12 conference presentations: AIChE Annual Meeting (2020, 2022 — multiple oral talks), ACS Fall Meeting (2022 — talks + PEUQSE workshop instruction), MRS Fall Meeting (2020, 2021), ChEGSA Symposium (2022). Topics: MOFs, CG modeling, BUQ, water confinement, CNNs, polymer-MOF compatibility, CO2 adsorption.",
+    keywords: ["conference", "talk", "presentation", "oral", "poster", "aiche", "acs", "mrs", "boston", "minneapolis", "upcoming"],
+    content: "Through 2022, 12 conference presentations: AIChE Annual Meeting (2020, 2022 — multiple oral talks), ACS Fall Meeting (2022 — talks + PEUQSE workshop instruction), MRS Fall Meeting (2020, 2021), ChEGSA Symposium (2022). Topics: MOFs, CG modeling, BUQ, water confinement, CNNs, polymer-MOF compatibility, CO2 adsorption. Since then: Meet the Faculty Candidates posters at the AIChE Annual Meeting (Boston 2025; Minneapolis 2026), three talks at AIChE 2026 in Minneapolis (Nov 2026), and the MRS Fall Meeting 2026 in Boston (upcoming: one talk and two posters, Nov 30 to Dec 2).",
     metadata: { priority: 6 }
   },
   {
@@ -519,14 +519,14 @@ const KNOWLEDGE_BASE = [
     id: "impact-1",
     category: "impact",
     keywords: ["citation", "impact", "publication", "count", "paper", "how", "many", "first", "author"],
-    content: "Abhishek has 19 peer-reviewed papers in total: 17 already published and 2 in press. He is first or co-first author on 10 of them. His papers have 434 citations in total (Google Scholar). Generated preliminary data that supported his Ph.D. advisor's NSF CAREER proposal.",
+    content: "Abhishek has 19 peer-reviewed papers in total: 18 already published and 1 in press. He is first or co-first author on 10 of them. His papers have 434 citations in total (Google Scholar). Generated preliminary data that supported his Ph.D. advisor's NSF CAREER proposal.",
     metadata: { priority: 7 }
   },
   {
     id: "future-1",
     category: "career",
-    keywords: ["faculty", "professor", "job", "market", "hire", "position", "group", "lab", "future", "plan", "goal"],
-    content: "Abhishek is on the 2026-27 academic job market for faculty positions. At the upcoming AIChE Annual Meeting 2026 in Minneapolis he will present poster 3gc in the Meet the Faculty and Post-Doc Candidates session (Sun Nov 8) and three talks on Mon Nov 9: 70a 'Toward Confidence-Gated Materials Discovery' (8:00 AM, Faculty Candidates in CoMSEF/Area 1a), 91g 'LLM-Orchestrated Multi-Agent Workflows for Autonomous Molecular Dynamics Screening of Additives in Biopolymer-Clay Nanocomposites' (10:10 AM, Room 103F) and 210j 'Accelerating Inverse Design of Multi-Functional Composite Aerogels through Integrated Robotic Fabrication, Predictive-Generative AI and in silico Modeling' (5:45 PM, Room M100F). His CV is available on this site.",
+    keywords: ["faculty", "professor", "job", "market", "hire", "position", "group", "lab", "future", "plan", "goal", "mrs", "boston", "meet"],
+    content: "Abhishek is on the 2026-27 academic job market for faculty positions. At the MRS Fall Meeting 2026 in Boston he will give a talk, 'Autonomous Inverse Design of Multi-Functional Composite Aerogels via Predictive-Generative AI and Robotic Triads' (Mon Nov 30, 4:00 PM ET, Sheraton Boston, Back Bay A), present poster FC52 in the Meet the New Faculty Candidates poster session (Wed Dec 2, 5-7 PM ET, Hynes, Hall D) and present poster MT01.08.08, 'LLM-Orchestrated Multi-Agent Workflows for Autonomous Molecular Dynamics Screening of Additives in Biopolymer-Clay Nanocomposites' (Wed Dec 2, 7-9 PM ET, Hynes, Hall A). Earlier, at the AIChE Annual Meeting 2026 in Minneapolis (Nov 8-9), he presented poster 3gc in the Meet the Faculty and Post-Doc Candidates session and three talks: 70a 'Toward Confidence-Gated Materials Discovery', 91g 'LLM-Orchestrated Multi-Agent Workflows for Autonomous Molecular Dynamics Screening of Additives in Biopolymer-Clay Nanocomposites' and 210j 'Accelerating Inverse Design of Multi-Functional Composite Aerogels through Integrated Robotic Fabrication, Predictive-Generative AI and in silico Modeling'. His CV is available on this site.",
     metadata: { priority: 8 }
   },
 
